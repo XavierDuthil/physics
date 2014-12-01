@@ -1,20 +1,27 @@
 package physics.engine;
 
-public class Rectangle extends Point
+public class Rectangle extends Movable
 {
-    int height;
-    int width;
+    private double height;
+    private double width;
     
-    public Rectangle(int x, int y, int height, int width)
+    public Rectangle(double x, double y, double height, double width)
     {
-        super(x, y);
+        super(x, y, "rectangle");
         this.height = height;
         this.width = width;
     }
     
-    public int getHeight()
+    public Rectangle(Rectangle clone)
     {
-        return height;
+        super(clone.getX(), clone.getY(), clone.getRenderType());
+        this.height = clone.getHeight();
+        this.height = clone.getWidth();
+    }
+    
+    public double getHeight()
+    {
+        return this.height;
     }
 
     public void setHeight(int height)
@@ -22,9 +29,9 @@ public class Rectangle extends Point
         this.height = height;
     }
 
-    public int getWidth()
+    public double getWidth()
     {
-        return width;
+        return this.width;
     }
 
     public void setWidth(int width)

@@ -1,6 +1,6 @@
 package physics.engine;
 
-public class Point
+public abstract class Positionable
 {
     private double x;
     private double y;
@@ -8,7 +8,7 @@ public class Point
     private double speed;
     
     // First constructor : only coordinates, no movement.
-    public Point(int x, int y)
+    public Positionable(double x, double y)
     {
         this.x = x;
         this.y = y;
@@ -17,7 +17,7 @@ public class Point
     }
     
     // Second constructor : enter coordinates, direction and speed
-    public Point(int x, int y, double direction, double speed)
+    public Positionable(double x, double y, double direction, double speed)
     {
         this.x = x;
         this.y = y;
@@ -25,16 +25,10 @@ public class Point
         this.speed = speed;
     }
     
-    public void setPosition(int newX, int newY)
+    public void setPosition(double newX, double newY)
     {
         this.x = newX;
         this.y = newY;
-    }
-    
-    public void move(int toRight, int toBottom)
-    {
-       this.x += toRight;
-       this.y += toBottom;
     }
     
     public double getX()
@@ -42,7 +36,7 @@ public class Point
         return x;
     }
 
-    public void setX(int x)
+    public void setX(double x)
     {
         this.x = x;
     }
@@ -52,8 +46,14 @@ public class Point
         return y;
     }
 
-    public void setY(int y)
+    public void setY(double y)
     {
         this.y = y;
+    }
+
+    @Override
+    public String toString()
+    {
+        return super.toString() +"\nPositionable{" + "x=" + x + ", y=" + y + ", direction=" + direction + ", speed=" + speed + '}';
     }
 }

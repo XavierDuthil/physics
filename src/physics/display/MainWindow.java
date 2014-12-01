@@ -10,6 +10,7 @@ import javax.swing.border.LineBorder;
 public class MainWindow extends JFrame
 {
     DrawingPanel drawingPanel;
+    JLabel fps;
     
     public MainWindow()
     {
@@ -34,14 +35,23 @@ public class MainWindow extends JFrame
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        
-        JLabel label = new JLabel("Test");
-        panel.add(label, BorderLayout.NORTH);
+
+        JLabel titreLabel = new JLabel("Test");
+        panel.add(titreLabel, BorderLayout.NORTH);
 
         drawingPanel = new DrawingPanel();
         drawingPanel.setBorder(new LineBorder(Color.black));
         drawingPanel.setBackground(Color.white);
         panel.add(drawingPanel);
+        
+        fps = new JLabel();
+        JLabel label_for_fps = new JLabel("FPS : ");
+        label_for_fps.setLabelFor(fps);
+        
+        JPanel infoPanel = new JPanel();
+        infoPanel.add(label_for_fps);
+        infoPanel.add(fps);
+        panel.add(infoPanel, BorderLayout.EAST);
         
         return panel;
     }
@@ -49,5 +59,11 @@ public class MainWindow extends JFrame
     public DrawingPanel getDrawingPanel()
     {
         return drawingPanel;
+    }
+    
+    public void setFPS(double fps)
+    {
+        fps = Math.round(fps * 10) / 10;
+        this.fps.setText("" +fps);
     }
 }

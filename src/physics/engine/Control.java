@@ -6,49 +6,139 @@ import physics.display.MainWindow;
 
 public class Control
 {
+    private MainWindow mainWindow;
     private DrawingPanel drawingPanel;
-    private ArrayList<Rectangle> rectanglesList;
-    private ArrayList<Circle> circlesList;
+    private MainLoop mainLoop;
+    private ArrayList<Renderable> objects;
+    private boolean running;
+    private double fps;
+    
+    // Temps fixé entre chaque update du moteur
+    private static final int MS_PER_UPDATE = 10;
+    private static final double GRAVITY = 10;
     
     public Control(MainWindow window)
     {
-        drawingPanel = window.getDrawingPanel();
+        this.mainWindow = window;
+        this.drawingPanel = window.getDrawingPanel();
+        this.mainLoop = new MainLoop(drawingPanel);
         init();
         run();
     }
     
     private void init()
     {
-        this.rectanglesList = new ArrayList<>();
-        this.circlesList = new ArrayList<>();
+        // 100px = 1m
         
-        this.rectanglesList.add(new Rectangle(50,50,3,3));
-        this.circlesList.add(new Circle(150,150,50));
+        this.objects = new ArrayList<>();
+        //this.objects.add(new Rectangle(150,150,150,150));
+        this.objects.add(new Circle(150, 450, 50, 50, 0.5));
+        this.objects.add(new Circle(400, 300, 50, 50, 0.5));
     }
-
+    
     private void run()
     {
-        for(int i = 50; i < 500; i++)
+        // Best game loop system : 
+        // The engine continues rendering even if it's too soon to update, 
+        // and it renders with a purcentage of progression toward the next frame
+        // In the other hand, if the engine is one tick or more too late, 
+        // it catches its lateness with the while bloc
+        // See http://gameprogrammingpatterns.com/game-loop.html
+        
+        double previousTime = System.nanoTime() / 1000000;
+        double lastRender = System.nanoTime() / 1000000;
+        double lag = 0.0;
+        this.running = true;
+        double currentTime;
+        double elapsedTime;
+        int count = 0;
+        
+        while(this.running)
         {
-            Circle circle = circlesList.get(0);
-            int x = (int)circle.getX() + 1;
-            int y = (int)circle.getY() + 1;
-            circle.setX(x);
-            circle.setY(y);
+            currentTime = System.nanoTime() / 1000000;
+            elapsedTime = currentTime - previousTime;
+            previousTime = currentTime;
             
-            redraw();
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            lag += elapsedTime;
+            
+            this.processInput();
+            
+            // The engine catches up its lateness
+            while(lag >= MS_PER_UPDATE)
+            {
+                this.update();
+                lag -= MS_PER_UPDATE;
+            }
+
+            // Stabilise at 60 fps : skips the rendering if time too short since last frame
+            this.fps = (1 / ((System.nanoTime() - lastRender) / 1000000)) * 1000;
+            if (fps <= 60)
+            {
+                this.render(lag / MS_PER_UPDATE);
+                mainWindow.setFPS(this.fps);
+                lastRender = System.nanoTime();
+                count ++;
+                System.out.println(count);
             }
         }
     }
     
-    private void redraw()
+    private void processInput()
     {
-        this.drawingPanel.setRectanglesList(rectanglesList);
-        this.drawingPanel.setCirclesList(circlesList);
-        this.drawingPanel.repaint();
+        
+    }
+    
+    private void update()
+    {
+        for (Renderable object : this.objects)
+        {
+            Circle physicObject = (Circle)object;
+            physicObject.reactToGravity(GRAVITY, MS_PER_UPDATE);
+            physicObject.move();
+            
+            double y = physicObject.getY();
+            double diametre = physicObject.getDiameter();
+            double ySpeed = physicObject.getYSpeed();
+            if (y - diametre/2 + ySpeed < 0)
+            {
+                physicObject.setYSpeed(Math.abs(ySpeed));
+            }
+            
+            //System.out.println(physicObject.toString());
+        }
+        
+        //double mass = object.getMass();
+    }
+    
+    private void render(double frameProgression)
+    {
+        ArrayList<Renderable> objectsToRender = cloneRenderableObjects(this.objects);
+        this.drawingPanel.render(objectsToRender);
+    }
+   
+    
+    private ArrayList<Renderable> cloneRenderableObjects(ArrayList<Renderable> toClone)
+    {
+        ArrayList<Renderable> clone = new ArrayList<>(toClone.size());
+        
+        for (Renderable object: toClone)
+        {
+            switch(object.getRenderType())
+            {
+                case "circle":
+                    clone.add((Renderable)new Circle((Circle)object));
+                break;
+                    
+                case "rectangle":
+                    clone.add((Renderable)new Rectangle((Rectangle)object));
+                break;
+                    
+                default:
+                    System.out.println("Error - Unable to clone : unknown renderType '" +object.getRenderType() +"'");
+                break;
+            }
+        }
+        
+        return clone;
     }
 }

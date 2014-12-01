@@ -1,22 +1,34 @@
 package physics.engine;
 
-public class Circle extends Point
+public class Circle extends PhysicObject
 {
-    int diameter;
+    double diameter;
     
-    public Circle(int x, int y, int diameter)
+    public Circle(double x, double y, double diameter, double mass, double elasticity)
     {
-        super(x, y);
+        super(x, y, "circle", mass, elasticity);
         this.diameter = diameter;
     }
     
-    public int getDiameter()
+    public Circle(Circle clone)
+    {
+        super(clone.getX(), clone.getY(), clone.getRenderType(), clone.getMass(), clone.getElasticity());
+        this.diameter = clone.getDiameter();
+    }
+    
+    public double getDiameter()
     {
         return diameter;
     }
 
-    public void setHeight(int diameter)
+    public void setDiametre(int diameter)
     {
         this.diameter = diameter;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return super.toString();
     }
 }
