@@ -32,8 +32,16 @@ public class Control
         
         this.objects = new ArrayList<>();
         //this.objects.add(new Rectangle(150,150,150,150));
-        this.objects.add(new Circle(150, 450, 50, 50, 0.5));
-        this.objects.add(new Circle(400, 300, 50, 50, 0.5));
+        this.objects.add(new Circle(25, 450, 50, 50, 1));
+        this.objects.add(new Circle(75, 450, 50, 50, 0.95));
+        this.objects.add(new Circle(125, 450, 50, 50, 0.90));
+        this.objects.add(new Circle(175, 450, 50, 50, 0.85));
+        this.objects.add(new Circle(225, 450, 50, 50, 0.80));
+        this.objects.add(new Circle(275, 450, 50, 50, 0.75));
+        this.objects.add(new Circle(325, 450, 50, 50, 0.70));
+        this.objects.add(new Circle(375, 450, 50, 50, 0.65));
+        this.objects.add(new Circle(425, 450, 50, 50, 0.60));
+        this.objects.add(new Circle(475, 450, 50, 50, 0.55));
     }
     
     private void run()
@@ -99,9 +107,11 @@ public class Control
             double y = physicObject.getY();
             double diametre = physicObject.getDiameter();
             double ySpeed = physicObject.getYSpeed();
+            
+            // Collision avec le sol
             if (y - diametre/2 + ySpeed < 0)
             {
-                physicObject.setYSpeed(Math.abs(ySpeed));
+                physicObject.setYSpeed(Math.abs(ySpeed) * physicObject.getCoefficientOfRestitution());
             }
             
             //System.out.println(physicObject.toString());

@@ -12,7 +12,7 @@ public class Circle extends PhysicObject
     
     public Circle(Circle clone)
     {
-        super(clone.getX(), clone.getY(), clone.getRenderType(), clone.getMass(), clone.getElasticity());
+        super(clone.getX(), clone.getY(), clone.getRenderType(), clone.getMass(), clone.getCoefficientOfRestitution());
         this.diameter = clone.getDiameter();
     }
     

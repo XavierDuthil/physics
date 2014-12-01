@@ -2,14 +2,16 @@ package physics.engine;
 
 public abstract class PhysicObject extends Movable
 {
-    double mass;
-    double elasticity;
+    private double mass;
     
-    public PhysicObject(double x, double y, String renderType, double mass, double elasticity)
+    // Rebound factor, between 0 and 1
+    private double coefficientOfRestitution;
+    
+    public PhysicObject(double x, double y, String renderType, double mass, double coefficientOfRestitution)
     {
         super(x, y, renderType);
         this.mass = mass;
-        this.elasticity = elasticity;
+        this.coefficientOfRestitution = coefficientOfRestitution;
     }
 
     public double getMass()
@@ -22,14 +24,14 @@ public abstract class PhysicObject extends Movable
         this.mass = mass;
     }
 
-    public double getElasticity()
+    public double getCoefficientOfRestitution()
     {
-        return elasticity;
+        return coefficientOfRestitution;
     }
 
-    public void setElasticity(double elasticity)
+    public void setCoefficientOfRestitution(double coefficientOfRestitution)
     {
-        this.elasticity = elasticity;
+        this.coefficientOfRestitution = coefficientOfRestitution;
     }
     
     public void reactToGravity(double gravity, int timeInMs)
