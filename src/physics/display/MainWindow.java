@@ -2,6 +2,7 @@ package physics.display;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -9,8 +10,9 @@ import javax.swing.border.LineBorder;
 
 public class MainWindow extends JFrame
 {
-    DrawingPanel drawingPanel;
-    JLabel fps;
+    private DrawingPanel drawingPanel;
+    private JButton resetButton;
+    private JLabel fps;
     
     public MainWindow()
     {
@@ -48,9 +50,12 @@ public class MainWindow extends JFrame
         JLabel label_for_fps = new JLabel("FPS : ");
         label_for_fps.setLabelFor(fps);
         
+        resetButton = new JButton("Reset");
+        
         JPanel infoPanel = new JPanel();
         infoPanel.add(label_for_fps);
         infoPanel.add(fps);
+        infoPanel.add(resetButton);
         panel.add(infoPanel, BorderLayout.EAST);
         
         return panel;
@@ -65,5 +70,10 @@ public class MainWindow extends JFrame
     {
         fps = Math.round(fps * 10) / 10;
         this.fps.setText("" +fps);
+    }
+    
+    public JButton getResetButton()
+    {
+        return this.resetButton;
     }
 }

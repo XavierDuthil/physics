@@ -77,7 +77,7 @@ public class DrawingPanel extends JPanel
                 break;
             }
         }
-        System.out.println("real frames : " +this.frameCount);
+        // System.out.println("real frames : " +this.frameCount);
         this.repaint();
     }
     

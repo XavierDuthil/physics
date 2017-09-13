@@ -1,5 +1,7 @@
 package physics.engine;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import physics.display.DrawingPanel;
 import physics.display.MainWindow;
@@ -86,7 +88,7 @@ public class Control
                 mainWindow.setFPS(this.fps);
                 lastRender = System.nanoTime();
                 count ++;
-                System.out.println(count);
+                // System.out.println(count);
             }
         }
     }
@@ -112,6 +114,7 @@ public class Control
             if (y - diametre/2 + ySpeed < 0)
             {
                 physicObject.setYSpeed(Math.abs(ySpeed) * physicObject.getCoefficientOfRestitution());
+                //physicObject.setY(diametre/2);
             }
             
             //System.out.println(physicObject.toString());
